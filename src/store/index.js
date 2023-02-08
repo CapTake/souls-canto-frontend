@@ -1,15 +1,16 @@
 import { createStore } from 'vuex'
 import state from './state'
 import actions from './actions'
-import { useToast } from "vue-toastification";
+import { useToast } from "vue-toastification"
+import { ethers } from 'ethers'
 
 const toast = useToast()
 
 export default createStore({
     actions,
     getters: {
-        shortWallet: (state) => `${state.userAddress.slice(0,5)}...${state.userAddress.slice(-5)}`,
-        // soldOut: ({ minted, supply }) => minted && (supply === minted)
+        shortWallet: (state) => `${state.userAddress.slice(0,4)}...${state.userAddress.slice(-4)}`,
+        priceView: (state) => ethers.utils.formatUnits(state.price, 18)
     },
     mutations: {
         error: (state, value) => {
@@ -17,7 +18,7 @@ export default createStore({
         },
         userAddress: (state, value) => state.userAddress = value || '',
         price: (state, value) => state.price = value || '0',
-        minted: (state, value) => state.minted = value || 0,
+        minted: (state, value) => state.minted = value?.toString ? value.toString() : (value || '0'),
         minting: (state, value) => state.minting = !!value,
         loading: (state, value) => state.loading = !!value,
         ready: (state, value) => state.ready = !!value,

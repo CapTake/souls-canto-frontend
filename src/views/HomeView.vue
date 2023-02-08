@@ -1,152 +1,151 @@
 <template>
-  <div>
-    <section
-      id="home"
-      class="min-h-screen pt-20 relative bg-gradient-to-b from-blue-100 to-blue-300"
-    >
-      <h1
-        class="logo-h1 font-nice drop-shadow-lg text-center bg-clip-text text-transparent bg-gradient-to-b from-pink-500 to-violet-500 py-6 mx-auto"
-      >
-        Canto<br />
-        <span class="text-8xl">ZOO</span>
-      </h1>
-      <div class="flex justify-center gap-4 mx-auto mt-4 max-w-xl">
-        <div @click="randomPic(0)" class="flex-1 cursor-pointer rounded-lg drop-shadow-md -rotate-12 p-2 translate-x-6 bg-white hover:scale-105 hover:drop-shadow-lg transition-all">
-          <img :src="`/img/${selected[0]}.png`" class="rounded-sm" />
-        </div>
-        <div @click="randomPic(1)" class="flex-1 cursor-pointer rounded-lg drop-shadow-md -translate-y-7 p-2 bg-white hover:scale-105 hover:drop-shadow-lg transition-all">
-          <img :src="`/img/${selected[1]}.png`" class="rounded-sm" />
-        </div>
-        <div @click="randomPic(2)" class="flex-1 cursor-pointer rounded-lg drop-shadow-md p-2 rotate-12 -translate-x-6 bg-white hover:scale-105 hover:drop-shadow-lg transition-all">
-          <img :src="`/img/${selected[2]}.png`" class="rounded-sm" />
-        </div>
+    <section id="home" class="flex items-center justify-center min-h-screen pt-20 relative">
+    <div class="max-w-[700px] bg-slate-800 rounded-lg drop-shadow-lg border border-spacing-1 border-slate-700 p-4 lg:p-8 mx-4">
+      <div class="flex flex-col mt-6 gap-6 items-center justify-center text-3xl sm:text-4xl md:text-5xl font-nice text-white text-center">
+        <div>Summon the Soul of Legendary Hero</div>
       </div>
-      <div v-if="paused" class="flex flex-col mt-10 gap-6 items-center justify-center text-3xl sm:text-4xl md:text-5xl font-nice text-white text-center">
-        <div>Minting Starts Soon</div>
-        <p class="font-digits text-base">Follow us to get updates.</p>
-        <div @click="flipSaleStatus" class="floating">👇</div>
-      </div>
-      <div v-else class="text-3xl sm:text-4xl md:text-5xl font-nice text-white">
-        <div class="text-center tracking-wide drop-shadow-sm">
-          {{ minted.toString() }} / {{ supply }}
+      <div class="text-xl sm:text-2xl md:text-3xl font-nice text-white">
+        <div class="my-6">
+              <div v-for="trait in traits" :key="trait[0]" class="flex gap-4 justify-between items-center px-2 rounded font-mono hover:bg-slate-700 transition-all">
+                <div class="uppercase flex-grow">{{ trait[0] }}</div>
+                <button @click="updateTrait(trait[0], -1)" class="p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div class="text-center w-8">{{ trait[1] }}</div>
+                <button @click="updateTrait(trait[0], 1)" class="p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 01-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 011.06-1.06l7.5 7.5z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+                <div class="relative cursor-pointer">
+                    <div class="flex rounded-full w-5 h-5 bg-slate-600 text-lg items-center justify-center text-slate-800 text-center">?</div>
+                </div>
+            </div>
+            <hr class="my-2">
+            <div class="flex gap-4 justify-between items-center px-2 font-mono">
+                <div class="flex-grow text-right">Unused: </div>
+                <div class="w-24 text-center">{{ freePoints }} / 35</div>
+                <button @click="randomize" class="p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                    <path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <div class="flex gap-6 justify-center items-center mt-4">
-          <button @click="mintAmount(-1)" class="w-16 h-16 rounded-full bg-green-400 hover:bg-green-500 drop-shadow-lg border-2 border-green-300">
-            -
-          </button>
-          <div class="p-3">{{ amount }}</div>
-          <button @click="mintAmount(1)" class="w-16 h-16 rounded-full bg-green-400 hover:bg-green-500 drop-shadow-lg border-2 border-green-300">
-            +
-          </button>
+        <div class="text-center tracking-wide text-xl text-slate-400 mb-6">
+          Summoned: {{ minted }}, Current price: {{ Math.round(priceView) }} canto
         </div>
         <div class="text-center mt-4">
-          <button @click="mint(1)" class="floating bg-yellow-400 px-6 py-2.5 text-2xl hover:bg-yellow-500 rounded-lg drop-shadow-lg border-4 border-l-yellow-300 border-t-yellow-300 border-r-yellow-500 border-b-yellow-500">
+          <button @click="mint()" class="bg-blue-400 px-6 py-2.5 text-2xl hover:bg-blue-500 rounded-lg drop-shadow-lg border-4 border-l-blue-300 border-t-blue-300 border-r-blue-500 border-b-blue-500">
             <span class="drop-shadow-sm font-digits font-bold tracking-widest">
-              MINT
+              SUMMON
             </span>
           </button>
         </div>
       </div>
-      <div class="w-full flex justify-center gap-8 p-10 text-white drop-shadow">
+      <div class="w-full flex justify-center gap-8 mt-10 text-white drop-shadow">
           <a href="https://twitter.com/CantoZoo" target="_blank" rel="noopener nofollow"><twitter-icon class="w-8 h-8 cursor-pointer" /></a>
-          <a href="https://discord.gg/ppz3wSupem" target="_blank" rel="noopener nofollow"><discord-icon class="w-8 h-8 cursor-pointer" /></a>
+          <!-- <a href="https://discord.gg/zzz" target="_blank" rel="noopener nofollow"><discord-icon class="w-8 h-8 cursor-pointer" /></a> -->
         </div>
       <div v-if="minting" class="flex justify-center items-center absolute inset-0 bg-black bg-opacity-50">
         <div class="rounded-lg bg-white drop-shadow-lg p-8 text-center">
-          Minting...
+          Waiting for blockchain confirmation...
         </div>
       </div>
-    </section>
-    <section id="faq" class="flex items-center justify-center min-h-screen pt-[60px] pb-6 font-digits relative overflow-hidden" >
-        <div class="top-0 absolute scrolling-up w-full" style="background: url('/img/brickbg.png'); height: 200%; background-size: auto 50vh;">
-        </div>
-      <div class="rounded-lg bg-white drop-shadow-lg sm:w-[550px] max-w-full p-4 mx-4">
-        <h1 class="text-center text-xl mb-4 tracking-wide">FAQ</h1>
-        <p>Hello Cantonian, Welcome to the Canto Zoo!</p>
-        <FAQ />
-        <p>Mint contract: <a :href="contractLink" class="hover:text-blue-800 transition-all" target="_blank" rel="noopener nofollow">{{ contract }}</a></p>
-        <p class="break-all">Provenance: 9920e57f96a9ba0ec06718a50814f134e5546ec15a88188dd8f097c3cdcfb8bf</p>
-      </div>
-    </section>
-    <section id="about" class="min-h-screen flex items-center pt-[60px] pb-6 font-digits justify-center relative overflow-hidden">
-     <div class="inset-0 absolute scaling" style="background: url('/img/patternbg.png');">
-    </div>
-    <div class="rounded-lg bg-white drop-shadow-lg sm:w-[550px] max-w-full p-4 mx-4">
-        <h1 class="text-center text-xl mb-4 tracking-wide">About</h1>
-        <about-it />
     </div>
     </section>
-  </div>
 </template>
 
 <script>
-import FAQ from "@/components/FAQ.vue"
-import TwitterIcon from "@/components/TwitterIcon.vue"
-import DiscordIcon from '@/components/DiscordIcon.vue'
-import { mapState } from "vuex"
-import config from "../config"
-import AboutIt from '@/components/AboutIt.vue'
+// import FAQ from '@/components/FAQ.vue'
+import TwitterIcon from '@/components/TwitterIcon.vue'
+import { mapGetters, mapState } from 'vuex'
+import config from '../config'
+// import AboutIt from '@/components/AboutIt.vue'
+
+const MAX_CUMULATIVE_POINTS = 35
+const MIN_TRAIT_POINTS = 2
+const MAX_TRAIT_POINTS = 10
 
 export default {
-  components: { TwitterIcon, DiscordIcon, FAQ, AboutIt },
-  name: "HomeView",
+  components: { TwitterIcon },
+  name: 'HomeView',
   data() {
     return {
-      selected: [1, 3, 5],
-      amount: 1,
-      clicks: 0
+      stats: {
+        agi: 5,
+        cha: 5,
+        con: 5,
+        dex: 5,
+        int: 5,
+        str: 5,
+        wis: 5
+      }
     };
   },
   computed: {
-    ...mapState(["minted", "supply", "loading", "ready", "minting", "paused"]),
+    ...mapState(['minted', 'loading', 'ready', 'minting', 'paused']),
+    ...mapGetters(['priceView']),
+    traits () {
+        return Object.entries(this.stats)
+    },
+    freePoints () {
+        return MAX_CUMULATIVE_POINTS - Object.values(this.stats).reduce((acc, it) => acc + it, 0)
+    },
     contractLink () {
         return `${config.mainnet.explorer}/address/${config.mainnet.contract}`
     },
     contract () {
         const contract = config.mainnet.contract
-        return `${contract.slice(0,6)}...${contract.slice(-6)}`
+        return `${contract.slice(0, 4)}...${contract.slice(-4)}`
     }
   },
   mounted() {
-    this.randomPic(0)
-    this.randomPic(1)
-    this.randomPic(2)
-    this.clicks = 0
+    this.randomize()
   },
   methods: {
     async mint () {
-      await this.$store.dispatch("mintTokens", this.amount)
+      await this.$store.dispatch('summon', this.stats)
     },
-    async flipSaleStatus () {
-      //await this.$store.dispatch('setBaseUri', 'ipfs://bafybeib4nu7hvqosqpepw7kuaxw4b2efamafyzcphvlthog7bbhu32rh5m/') // 
-      await this.$store.dispatch('flipSaleStatus')
+    updateTrait(trait, delta) {
+        const stats = this.stats
+        const points = Object.values(stats).reduce((acc, it) => acc + it, 0) + delta
+        if (points < MIN_TRAIT_POINTS * 7 || points > MAX_CUMULATIVE_POINTS) return
+        const value = stats[trait] + delta
+        if (value < MIN_TRAIT_POINTS || value > MAX_TRAIT_POINTS) return
+        stats[trait] = value
     },
-    //we have 12 pics to choose from
-    randomPic (n) {
-      const selected = this.selected
-      let i = selected[n]
-      while (selected.includes(i)) {
-        i = Math.floor(Math.random() * 12) + 1
+    // randomize traits
+    randomize () {
+      const points = new Array(
+        MIN_TRAIT_POINTS,
+        MIN_TRAIT_POINTS,
+        MIN_TRAIT_POINTS,
+        MIN_TRAIT_POINTS,
+        MIN_TRAIT_POINTS,
+        MIN_TRAIT_POINTS,
+        MIN_TRAIT_POINTS
+      );
+      let distribute = MAX_CUMULATIVE_POINTS - 7 * MIN_TRAIT_POINTS
+      while (distribute > 0) {
+        const i = Math.floor(Math.random() * 7)
+        if (points[i] < MAX_TRAIT_POINTS) {
+            points[i]++
+            distribute--
+        }
       }
-      this.selected[n] = i
-      this.clicks++
-      if (this.clicks > 15) {
-        this.selected[0] = 'hidden'
-        this.selected[1] = 'hidden'
-        this.selected[2] = 'hidden'
-      }
-      if (this.clicks > 25) {
-        this.selected[0] = 'hidden'
-        this.selected[1] = i
-        this.selected[2] = 'hidden'
-      }
-      if (this.clicks > 33) {
-        this.selected[n] = i
-      }
-    },
-    mintAmount(n) {
-      this.amount = Math.max(Math.min(this.amount + n, 5), 1);
-    },
+      const stats = this.stats
+      stats.agi = points[0]
+      stats.cha = points[1]
+      stats.con = points[2]
+      stats.dex = points[3]
+      stats.int = points[4]
+      stats.str = points[5]
+      stats.wis = points[6]
+      console.log(stats)
+    }
   },
 };
 </script>

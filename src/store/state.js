@@ -3,8 +3,7 @@ export default {
     minting: false,
     userAddress: '',
     connecting: false,
-    price: "69",
-    minted: 0,
-    supply: 1100,
+    price: "0",
+    minted: "0",
     paused: false, //
 }

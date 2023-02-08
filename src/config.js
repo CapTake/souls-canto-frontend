@@ -5,7 +5,7 @@ export default {
         chainId: 740,
         symbol: 'CANTO',
         explorer: 'https://testnet-explorer.canto.neobase.one',
-        contract: '0x7EcdcE75d4D3cdA64BE94e5a65cCE59DEb7E2B71'
+        contract: '0x3d3e4BDC5F4f09aCEFCe72c1f99364F710B78956' // Summoner
     },
     mainnet: {
         name: 'CANTO',
@@ -13,6 +13,6 @@ export default {
         chainId: 7700,
         symbol: 'CANTO',
         explorer: 'https://evm.explorer.canto.io',
-        contract: '0x53f5ee168A22800db996c95f8709D02BA515E063'
+        contract: ''
     }
 }

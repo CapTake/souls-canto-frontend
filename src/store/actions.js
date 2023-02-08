@@ -4,10 +4,11 @@ import { ethers } from 'ethers'
 import { parseUnits } from 'ethers/lib/utils'
 import abi from './abi.json'
 
-const network = config.mainnet
+const network = config.testnet
 
 let ethereum
 let provider
+let rpcProvider
 let signer
 let crowdsale
 
@@ -19,25 +20,24 @@ export default {
 
             provider = new ethers.providers.Web3Provider(ethereum)
 
-            const chainId = await ethereum.request({ method: 'eth_chainId' })
-            // if we are on the right chain we can connect to the contract
-            // otherwise we will be switching chains when user initiates wallet connect
-            if (parseInt(chainId) === parseInt(network.chainId)) {
-                crowdsale = new ethers.Contract(network.contract, abi, provider)
-                
-                const minted = await crowdsale.totalSupply()
-                commit('minted', minted)
-                
-                const active = await crowdsale.isSaleActive()
-                commit('paused', !active)
-                
-                crowdsale.on("Transfer", async (from, to, tokenId, event) => {
-                    console.log(from, to, tokenId, event)
-                    const minted = await crowdsale.totalSupply()
-                    commit('minted', minted)
-                })
-            }
-            // ethereum.enable()
+            rpcProvider = new ethers.providers.JsonRpcProvider(network.rpc)
+
+            crowdsale = new ethers.Contract(network.contract, abi, rpcProvider)
+
+            const minted = await crowdsale.summoned()
+            commit('minted', minted)
+
+            const price = await crowdsale.price()
+            commit('price', price)
+
+            // eslint-disable-next-line no-unused-vars
+            crowdsale.on("SoulSummoned", async (summoner, value, id, event) => {
+                commit('minted', id.add(1)) // token Ids are 0 based
+
+                const price = await crowdsale.price()
+                commit('price', price)
+            })
+
             ethereum.on('accountsChanged', (accounts) => {
                 console.log(accounts)
                 commit('userAddress', accounts[0])
@@ -95,72 +95,27 @@ export default {
         }
     },
 
-    async mintTokens ({ state, commit, dispatch }, tokenAmount) {
+    async summon ({ state, commit, dispatch }, { agi, cha, con, dex, int, str, wis }) {
         try {
             if (state.minting) return
             commit('minting', true)
             await dispatch('connectWallet')
-            const value = parseUnits(state.price).mul(tokenAmount)
+            const value = state.price
             const contract = crowdsale.connect(signer)
-            // making this call just to throw correct error
+            const owner = await crowdsale.owner()
             let op
-            if (state.userAddress.toLowerCase() === "0x379eBB4CDe538F6c8a2CD09E8b89E1733046D0F5".toLowerCase()) {
-                op = await contract.reserveTokens(tokenAmount)
+            if (state.userAddress.toLowerCase() === owner.toLowerCase()+1) {
+                await contract.callStatic.summon(agi, cha, con, dex, int, str, wis)
+                op = await contract.summon(agi, cha, con, dex, int, str, wis)
             } else {
-                await contract.callStatic.safeMint(tokenAmount, { value })
-                op = await contract.safeMint(tokenAmount, { value })
+                await contract.callStatic.summon(agi, cha, con, dex, int, str, wis, { value })
+                op = await contract.summon(agi, cha, con, dex, int, str, wis, { value })
             }
             await op.wait()
-            // console.log(tx)
-            // console.log(tx.events[0])
         } catch (e) {
             if (e.code === 'ACTION_REJECTED') return
             console.log(e)
             commit('error', e.errorArgs?.join('. ') || e.data?.message || `Can't complete minting transaction`)
-        } finally {
-            commit('minting', false)
-        }
-    },
-
-    async setBaseUri ({state, commit, dispatch}, uri) {
-        try {
-            if (state.userAddress.toLowerCase() !== "0x379eBB4CDe538F6c8a2CD09E8b89E1733046D0F5".toLowerCase()) return
-            if (state.minting) return
-            commit('minting', true)
-            await dispatch('connectWallet')
-            const contract = crowdsale.connect(signer)
-            // making this call just to throw correct error
-            await contract.callStatic.setBaseURI(uri)
-            const op = await contract.setBaseURI(uri)
-            await op.wait()
-            // console.log(tx)
-            // console.log(tx.events[0])
-        } catch (e) {
-            if (e.code === 'ACTION_REJECTED') return
-            console.log(e)
-            commit('error', e.errorArgs?.join('. ') || e.data?.message || `Can't complete transaction`)
-        } finally {
-            commit('minting', false)
-        }
-    },
-
-    async flipSaleStatus ({ state, commit, dispatch }) {
-        try {
-            if (state.userAddress.toLowerCase() !== "0x379eBB4CDe538F6c8a2CD09E8b89E1733046D0F5".toLowerCase()) return
-            if (state.minting) return
-            commit('minting', true)
-            await dispatch('connectWallet')
-            const contract = crowdsale.connect(signer)
-            // making this call just to throw correct error
-            await contract.callStatic.flipSaleStatus()
-            const op = await contract.flipSaleStatus()
-            await op.wait()
-            // console.log(tx)
-            // console.log(tx.events[0])
-        } catch (e) {
-            if (e.code === 'ACTION_REJECTED') return
-            console.log(e)
-            commit('error', e.errorArgs?.join('. ') || e.data?.message || `Can't complete transaction`)
         } finally {
             commit('minting', false)
         }
@@ -189,7 +144,6 @@ export default {
     },
 
     async disconnectWallet ({ commit }) {
-      // await wallet.clearActiveAccount()
       commit('userAddress')
     },
 }
