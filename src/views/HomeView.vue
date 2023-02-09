@@ -46,7 +46,7 @@
         </div>
       </div>
       <div class="w-full flex justify-center gap-8 mt-10 text-white drop-shadow">
-          <a href="https://twitter.com/CantoZoo" target="_blank" rel="noopener nofollow"><twitter-icon class="w-8 h-8 cursor-pointer" /></a>
+          <a href="https://twitter.com/Hero_Souls_Tech" target="_blank" rel="noopener nofollow"><twitter-icon class="w-8 h-8 cursor-pointer" /></a>
           <!-- <a href="https://discord.gg/zzz" target="_blank" rel="noopener nofollow"><discord-icon class="w-8 h-8 cursor-pointer" /></a> -->
         </div>
       <div v-if="minting" class="flex justify-center items-center absolute inset-0 bg-black bg-opacity-50">
