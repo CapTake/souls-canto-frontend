@@ -13,6 +13,7 @@
     "autoprefixer": "^10",
     "core-js": "^3.8.3",
     "ethers": "^5.7.2",
+    "floating-vue": "^2.0.0-beta.20",
     "postcss": "^8",
     "tailwindcss": "^3",
     "vue": "^3.2.13",

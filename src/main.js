@@ -6,7 +6,11 @@ import store from './store'
 import Toast from "vue-toastification";
 // Import the CSS or use your own!
 import "vue-toastification/dist/index.css";
+import FloatingVue from 'floating-vue'
+import 'floating-vue/dist/style.css'
 
 const app = createApp(App)
 app.use(Toast, { hideProgressBar: true })
-app.use(store).mount('#app')
+  .use(FloatingVue)
+  .use(store)
+  .mount('#app')

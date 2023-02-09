@@ -6,7 +6,7 @@ module.exports = {
     },
     fontFamily: {
         digits: ['Bitter', 'serif'],
-        nice: ['Londrina Solid', 'cursive'],
+        mono: ['ui-monospace', 'serif']
     }
   },
   plugins: [],

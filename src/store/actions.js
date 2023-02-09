@@ -13,43 +13,46 @@ let signer
 let crowdsale
 
 export default {
-    async init ({ commit }) {
+    async init ({ state, commit }) {
         try {
             commit('loading', true)
-            ethereum = await detectEthereumProvider()
-
-            provider = new ethers.providers.Web3Provider(ethereum)
-
+            
             rpcProvider = new ethers.providers.JsonRpcProvider(network.rpc)
-
+            
             crowdsale = new ethers.Contract(network.contract, abi, rpcProvider)
-
+            
             const minted = await crowdsale.summoned()
             commit('minted', minted)
-
+            
             const price = await crowdsale.price()
             commit('price', price)
 
             // eslint-disable-next-line no-unused-vars
             crowdsale.on("SoulSummoned", async (summoner, value, id, event) => {
                 commit('minted', id.add(1)) // token Ids are 0 based
-
+                if (summoner?.toLowerCase() === state.userAddress.toLowerCase()) {
+                    commit('success', `Successfully summoned soul #${id}`)
+                }
                 const price = await crowdsale.price()
                 commit('price', price)
             })
 
-            ethereum.on('accountsChanged', (accounts) => {
-                console.log(accounts)
-                commit('userAddress', accounts[0])
-            })
+            ethereum = await detectEthereumProvider()
+            if (ethereum) {
+                provider = new ethers.providers.Web3Provider(ethereum)
 
-            // eslint-disable-next-line no-unused-vars
-            ethereum.on('chainChanged', _chainId => window.location.reload())
+                ethereum.on('accountsChanged', (accounts) => {
+                    console.log(accounts)
+                    commit('userAddress', accounts[0])
+                })
 
-            ethereum.on('message', ({ type, data }) => {
-                console.log('message:', type, data)
-            })
+                // eslint-disable-next-line no-unused-vars
+                ethereum.on('chainChanged', _chainId => window.location.reload())
 
+                ethereum.on('message', ({ type, data }) => {
+                    console.log('message:', type, data)
+                })
+            }
             commit('ready', true)
         } catch (e) {
             commit('error', e.message)

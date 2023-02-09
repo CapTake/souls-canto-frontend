@@ -13,9 +13,8 @@ export default createStore({
         priceView: (state) => ethers.utils.formatUnits(state.price, 18)
     },
     mutations: {
-        error: (state, value) => {
-            value && toast.error(value)
-        },
+        error: (state, value) => value && toast.error(value),
+        success: (state, value) => value && toast.success(value),
         userAddress: (state, value) => state.userAddress = value || '',
         price: (state, value) => state.price = value || '0',
         minted: (state, value) => state.minted = value?.toString ? value.toString() : (value || '0'),

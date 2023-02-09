@@ -1,9 +1,8 @@
 <template>
 <div>
-<nav class="flex p-4 mt-3 backdrop-blur-md rounded-lg gap-4 justify-between items-center tracking-widest max-w-sm mx-auto font-digits font-bold text-white md:text-xl text-lg flex-grow">
+<nav class="flex p-4 backdrop-blur-md rounded-lg gap-4 justify-between items-center tracking-widest max-w-sm mx-auto font-digits font-bold text-white md:text-xl text-lg flex-grow">
         <a href="/#home" class="hover:underline drop-shadow-md">Home</a>
         <a href="/#about" class="hover:underline drop-shadow-md">About</a>
-        <a href="/#faq" class="hover:underline drop-shadow-md">FAQ</a>
         <sync-button class="rounded py-2 px-4 text-sm tracking-wide bg-blue-400 drop-shadow-md hover:drop-shadow-sm transition-all hover:bg-blue-500" />
         <!-- <button @click="menuOpen = !menuOpen" class="lg:hidden cursor-pointer text-white">
         <menu-icon class="w-9 h-9" />
