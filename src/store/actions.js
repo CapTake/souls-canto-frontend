@@ -1,23 +1,19 @@
 import config from '../config'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { ethers } from 'ethers'
-import { parseUnits } from 'ethers/lib/utils'
 import abi from './abi.json'
+import { toRaw, isProxy } from 'vue'
 
 const network = config.testnet
 
-let ethereum
-let provider
-let rpcProvider
-let signer
 let crowdsale
 
 export default {
     async init ({ state, commit }) {
         try {
             commit('loading', true)
-            
-            rpcProvider = new ethers.providers.JsonRpcProvider(network.rpc)
+            console.log('inirt')
+            const rpcProvider = new ethers.providers.JsonRpcProvider(network.rpc)
             
             crowdsale = new ethers.Contract(network.contract, abi, rpcProvider)
             
@@ -26,20 +22,21 @@ export default {
             
             const price = await crowdsale.price()
             commit('price', price)
-
+            
             // eslint-disable-next-line no-unused-vars
             crowdsale.on("SoulSummoned", async (summoner, value, id, event) => {
-                commit('minted', id.add(1)) // token Ids are 0 based
                 if (summoner?.toLowerCase() === state.userAddress.toLowerCase()) {
                     commit('success', `Successfully summoned soul #${id}`)
                 }
+                commit('minted', id.add(1)) // token Ids are 0 based
                 const price = await crowdsale.price()
                 commit('price', price)
             })
 
-            ethereum = await detectEthereumProvider()
+            const ethereum = await detectEthereumProvider()
             if (ethereum) {
-                provider = new ethers.providers.Web3Provider(ethereum)
+                const provider = new ethers.providers.Web3Provider(ethereum)
+                commit('provider', provider)
 
                 ethereum.on('accountsChanged', (accounts) => {
                     console.log(accounts)
@@ -61,36 +58,33 @@ export default {
         }
     },
 
-    async switchNetwork (_, target) {
-        await ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: `0x${Number(target).toString(16)}` }],
-        })
-        // window.location.reload()
-    },
-
     async connectWallet ({ state, commit, dispatch }) {
         try {
-            if (!provider) {
+            if (!state.provider) {
                 throw new Error('Metamask is not installed!')
             }
-            const chainId = await ethereum.request({ method: 'eth_chainId' })
 
-            if (parseInt(chainId) !== parseInt(network.chainId)) {
-                await dispatch('switchNetwork', network.chainId)
+            const provider = isProxy(state.provider) ? toRaw(state.provider) : state.provider
+
+            const connectedNetwork = await provider.getNetwork()
+
+            const chainId = connectedNetwork?.chainId
+
+            if (chainId !== Number(network.chainId)) {
+                await provider.send('wallet_switchEthereumChain', [{ chainId: `0x${Number(network.chainId).toString(16)}` }])
             }
 
-            if (state.userAddress) return
+            if (!state.userAddress) {
+                await provider.send('eth_requestAccounts', [])
 
-            await provider.send('eth_requestAccounts', [])
+                const signer = provider.getSigner()
 
-            console.log(await provider.listAccounts())
+                const address = await signer.getAddress()
 
-            signer = provider.getSigner()
+                commit('userAddress', address)
+            }
 
-            const address = await signer.getAddress()
-
-            commit('userAddress', address)
+            return provider.getSigner()
         } catch (e) {
             console.log(e)
             await dispatch('disconnectWallet')
@@ -101,11 +95,17 @@ export default {
     async summon ({ state, commit, dispatch }, { agi, cha, con, dex, int, str, wis }) {
         try {
             if (state.minting) return
+
             commit('minting', true)
-            await dispatch('connectWallet')
+
+            const signer = await dispatch('connectWallet')
+
             const value = state.price
+
             const contract = crowdsale.connect(signer)
+
             const owner = await crowdsale.owner()
+
             let op
             if (state.userAddress.toLowerCase() === owner.toLowerCase()+1) {
                 await contract.callStatic.summon(agi, cha, con, dex, int, str, wis)
@@ -119,28 +119,6 @@ export default {
             if (e.code === 'ACTION_REJECTED') return
             console.log(e)
             commit('error', e.errorArgs?.join('. ') || e.data?.message || `Can't complete minting transaction`)
-        } finally {
-            commit('minting', false)
-        }
-    },
-
-    async setPrice ({ state, commit, dispatch }, price) {
-        try {
-            if (state.minting) return
-            commit('minting', true)
-            await dispatch('connectWallet')
-            const value = parseUnits(price)
-            console.log(value.toString())
-            const contract = crowdsale.connect(signer)
-            // making this call just to throw correct error
-            await contract.callStatic.setPrice(value)
-            const op = await contract.setPrice(value)
-            await op.wait()
-            // console.log(tx)
-            // console.log(tx.events[0])
-        } catch (e) {
-            console.log(e)
-            commit('error', e.errorArgs?.join('. ') || e.data?.message || `Can't complete transaction`)
         } finally {
             commit('minting', false)
         }

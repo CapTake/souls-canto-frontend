@@ -6,4 +6,6 @@ export default {
     price: "0",
     minted: "0",
     paused: false, //
+    provider: null,
+    signer: null,
 }

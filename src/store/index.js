@@ -22,6 +22,8 @@ export default createStore({
         loading: (state, value) => state.loading = !!value,
         ready: (state, value) => state.ready = !!value,
         paused: (state, value) => state.paused = !!value,
+        provider: (state, value) => state.provider = value || null,
+        signer: (state, value) => state.signer = value || null
     },
     modules: {
     },

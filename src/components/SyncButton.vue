@@ -14,9 +14,6 @@ export default {
     ...mapState(['userAddress']),
     ...mapGetters(['shortWallet'])
   },
-  async created () {
-    await this.$store.dispatch('init')
-  },
   methods: {
     async sync () {
       await this.$store.dispatch('connectWallet')
