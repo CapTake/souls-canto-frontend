@@ -1,7 +1,8 @@
 <template>
-    <section id="home" :class="{punk: clicks > 10, crt: clicks > 15}" class="flex items-center justify-center min-h-screen pt-20 relative">
+    <section id="home" :class="{punk: clicks > 10, crt: clicks > 15}" class="flex items-center justify-center min-h-screen pt-20 relative w-full">
     <div class="max-w-xl w-full bg-slate-800 rounded-lg drop-shadow-lg border border-spacing-1 border-slate-700 p-4 lg:p-8 mx-4 md:relative overflow-hidden">
-      <div class="text-xl sm:text-2xl md:text-3xl font-nice text-white">
+      <h1 class="text-4xl text-center text-slate-400">HERO SOULS</h1>
+      <div class="text-xl sm:text-2xl md:text-3xl text-white">
         <div class="my-4">
               <p class="text-sm sm:text-lg text-center text-slate-500 p-2">Fine tune the 7 core traits of your hero:</p>
               <div v-for="trait in traits" :key="trait[0]" class="flex gap-4 justify-between items-center px-2 rounded font-mono hover:bg-slate-700 transition-all">
@@ -55,7 +56,7 @@
       </transition>
     </div>
     </section>
-    <section id="about" :class="{punk: clicks > 10, crt: clicks > 15}" class="flex items-center justify-center min-h-screen pt-20 relative">
+    <section id="about" :class="{punk: clicks > 10, crt: clicks > 15}" class="flex items-center justify-center min-h-screen pt-20 relative w-full">
         <div class="max-w-xl w-full bg-slate-800 rounded-lg drop-shadow-lg border border-spacing-1 text-white border-slate-700 p-4 lg:p-8 mx-4">
             <h2 class="text-center mb-6 text-xl">About</h2>
             <p class="pb-4">

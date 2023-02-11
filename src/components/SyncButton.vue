@@ -1,19 +1,24 @@
 <template>
     <div v-if="userAddress">
-        <button  @click="unsync">{{ shortWallet }}</button> 
+        <button  @click="unsync">
+        <canto-icon class="inline-block w-8 h-8 -ml-2 mr-2 " /> {{ shortWallet }}
+        </button> 
     </div>
     <button v-else @click="sync">
-        Connect
+        <canto-icon class="inline-block w-8 h-8  -ml-2 mr-2 " /> Connect
     </button>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import CantoIcon from './CantoIcon.vue'
+
 export default {
   computed: {
     ...mapState(['userAddress']),
     ...mapGetters(['shortWallet'])
   },
+  components: { CantoIcon },
   methods: {
     async sync () {
       await this.$store.dispatch('connectWallet')
