@@ -1,11 +1,11 @@
 <template>
     <div v-if="userAddress">
         <button  @click="unsync">
-        <canto-icon class="inline-block w-8 h-8 -ml-2 mr-2 " /> {{ shortWallet }}
+        <canto-icon class="inline-block w-7 h-7 -ml-2 mr-2 text-base" /> {{ shortWallet }}
         </button> 
     </div>
-    <button v-else @click="sync">
-        <canto-icon class="inline-block w-8 h-8  -ml-2 mr-2 " /> Connect
+    <button v-else @click="sync" class="text-black bg-canto drop-shadow-md transition-all hover:bg-black hover:text-canto">
+        <canto-icon class="inline-block w-7 h-7 -ml-2 mr-2" /> Connect
     </button>
 </template>
 

@@ -1,42 +1,45 @@
 <template>
-    <section id="home" :class="{punk: clicks > 10, crt: clicks > 15}" class="flex items-center justify-center min-h-screen pt-20 relative w-full">
-    <div class="max-w-xl w-full bg-slate-800 rounded-lg drop-shadow-lg border border-spacing-1 border-slate-700 p-4 lg:p-8 mx-4 md:relative overflow-hidden">
-      <h1 class="text-4xl text-center text-slate-400">HERO SOULS</h1>
-      <div class="text-xl sm:text-2xl md:text-3xl text-white">
+    <section id="home" :class="{crt: clicks > 10}" class="punk flex items-center text-canto justify-center min-h-screen pt-20 relative w-full">
+    <div class="max-w-xl w-full bg-black rounded-md drop-shadow-lg border border-spacing-1 border-canto p-4 lg:p-8 mx-4 md:relative overflow-hidden">
+      <h1 class="text-4xl text-center opacity-80">
+        <canto-icon class="inline-block w-8 h-8 -mt-1 mr-2"/>
+        HERO SOULS
+      </h1>
+      <div class="text-xl sm:text-2xl md:text-3xl">
         <div class="my-4">
-              <p class="text-sm sm:text-lg text-center text-slate-500 p-2">Fine tune the 7 core traits of your hero:</p>
-              <div v-for="trait in traits" :key="trait[0]" class="flex gap-4 justify-between items-center px-2 rounded font-mono hover:bg-slate-700 transition-all">
+              <p class="text-sm sm:text-lg md:text-xl text-center opacity-40 p-2">Fine tune the 7 core traits of your hero:</p>
+              <div v-for="trait in traits" :key="trait[0]" class="flex gap-4 justify-between items-center px-2 rounded-sm font-mono hover:bg-green-900 hover:bg-opacity-40 transition-all">
                 <div class="uppercase flex-grow">{{ trait[0] }}</div>
-                <button @click="updateTrait(trait[0], -1)" class="p-2" :class="{'text-gray-600 cursor-not-allowed' : trait[1] < 3 }">
+                <button @click="updateTrait(trait[0], -1)" class="p-2" :class="{'opacity-20 cursor-not-allowed' : trait[1] < 3 }">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                     <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clip-rule="evenodd" />
                     </svg>
                 </button>
                 <div class="text-center w-8">{{ trait[1] }}</div>
-                <button @click="updateTrait(trait[0], 1)" class="p-2" :class="{'text-gray-600 cursor-not-allowed' : trait[1] > 9 }">
+                <button @click="updateTrait(trait[0], 1)" class="p-2" :class="{'opacity-20 cursor-not-allowed' : trait[1] > 9 || freePoints === 0}">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                     <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 01-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 011.06-1.06l7.5 7.5z" clip-rule="evenodd" />
                     </svg>
                 </button>
-                <button @mouseover="showTip(trait[0])" @mouseleave="hideTip" class="flex rounded-full w-5 h-5 bg-slate-600 text-lg items-center justify-center text-slate-800 text-center">
+                <button @mouseover="showTip(trait[0])" @mouseleave="hideTip" class="flex rounded-full w-5 h-5 bg-canto opacity-20 text-lg items-center justify-center text-black text-center">
                     ?
                 </button>
             </div>
-            <hr class="my-2">
-            <div class="flex gap-4 justify-between items-center px-2 font-mono text-slate-600">
-                <div class="flex-grow text-right ">Unassigned points: </div>
-                <div class="w-24 text-center" :class="{'text-white': freePoints > 0}">{{ freePoints }} / 35</div>
-                <button @click="randomize" class="text-slate-300 hover:text-white">
+            <hr class="my-2 border-canto opacity-30">
+            <div class="flex gap-4 justify-between items-center px-2 text-2xl">
+                <div class="flex-grow text-right opacity-30">Unassigned: </div>
+                <div class="w-32 text-center font-mono" :class="{'opacity-100': freePoints > 0, 'opacity-30': freePoints === 0}">{{ freePoints }} / 35</div>
+                <button @click="randomize" class="hover:opacity-100 opacity-50">
                     <dice-icon class="w-10 h-10"/>
                 </button>
             </div>
         </div>
-        <div class="text-center tracking-wide text-xl text-slate-400 mb-6">
+        <div class="text-center tracking-wide text-xl opacity-30 mb-4 mt-8">
           Summoned: {{ minted }}, Current price: {{ Math.round(priceView) }} canto
         </div>
-        <div class="text-center my-6">
-          <button @click="mint()" class="bg-blue-400 px-6 py-2.5 text-2xl hover:bg-blue-500 rounded-lg drop-shadow-lg border-4 border-l-blue-300 border-t-blue-300 border-r-blue-500 border-b-blue-500">
-            <span class="drop-shadow-sm font-digits font-bold tracking-widest">
+        <div class="text-center mb-6">
+          <button @click="mint()" class="bg-canto px-6 py-2.5 text-2xl hover:bg-black text-black hover:text-canto rounded drop-shadow-lg border-2 border-canto">
+            <span class="drop-shadow-sm font-mono font-bold tracking-widest">
               SUMMON
             </span>
           </button>
@@ -51,13 +54,13 @@
         </div>
       </div>
       <transition>
-        <div v-if="tip" v-html="tip" class="fixed bottom-0 left-0 right-0 md:left-4 text-sm md:right-4 md:max-w-full max-h-80 overflow-y-auto bg-white text-gray-700 px-4 py-4 rounded-t-md shadow-lg md:absolute">
+        <div v-if="tip" v-html="tip" class="fixed bottom-0 left-0 right-0 md:left-4 text-sm md:right-4 md:max-w-full max-h-80 overflow-y-auto bg-canto text-black px-4 py-4 rounded-t shadow-lg md:absolute">
         </div>
       </transition>
     </div>
     </section>
-    <section id="about" :class="{punk: clicks > 10, crt: clicks > 15}" class="flex items-center justify-center min-h-screen pt-20 relative w-full">
-        <div class="max-w-xl w-full bg-slate-800 rounded-lg drop-shadow-lg border border-spacing-1 text-white border-slate-700 p-4 lg:p-8 mx-4">
+    <section id="about" :class="{crt: clicks > 10}" class="punk flex items-center text-canto justify-center min-h-screen pt-20 relative w-full">
+        <div class="max-w-xl w-full bg-black rounded-md drop-shadow-lg border border-spacing-1 border-canto p-4 lg:p-8 mx-4 md:relative overflow-hidden">
             <h2 class="text-center mb-6 text-xl">About</h2>
             <p class="pb-4">
             </p>
@@ -70,6 +73,7 @@
 import DiceIcon from '@/components/DiceIcon.vue'
 import { mapGetters, mapState } from 'vuex'
 import config from '../config'
+import CantoIcon from '@/components/CantoIcon.vue'
 // import AboutIt from '@/components/AboutIt.vue'
 
 const MAX_CUMULATIVE_POINTS = 35
@@ -77,7 +81,7 @@ const MIN_TRAIT_POINTS = 2
 const MAX_TRAIT_POINTS = 10
 
 export default {
-  components: { DiceIcon },
+  components: { DiceIcon, CantoIcon },
   name: 'HomeView',
   data() {
     return {
@@ -215,9 +219,9 @@ often be enough to get you through a lot of situations.`
   transition: all 0.5s ease;
 }
 .punk {
-  backdrop-filter:saturate(200%) sepia(100%) hue-rotate(77deg) brightness(60%);
-  -webkit-filter: saturate(200%) sepia(100%) hue-rotate(77deg);
-  filter: saturate(200%) sepia(100%) hue-rotate(77deg);
+  backdrop-filter:saturate(200%) sepia(100%) hue-rotate(80deg) brightness(60%);
+  x-webkit-filter: saturate(200%) sepia(100%) hue-rotate(80deg);
+  x-filter: saturate(200%) sepia(100%) hue-rotate(80deg);
 }
 /* CRT effects */
 @keyframes flicker {

@@ -6,10 +6,6 @@ module.exports = {
         colors: {
             canto: '#06fc99'
         },
-    },
-    fontFamily: {
-        digits: ['Bitter', 'serif'],
-        mono: ['ui-monospace', 'serif']
     }
   },
   plugins: [],
