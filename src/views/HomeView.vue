@@ -8,14 +8,17 @@
       <div class="text-xl sm:text-2xl md:text-3xl">
         <div class="my-4">
               <p class="text-sm sm:text-lg md:text-xl text-center opacity-40 p-2">Fine tune the 7 core traits of your hero:</p>
-              <div v-for="trait in traits" :key="trait[0]" class="flex gap-4 justify-between items-center px-2 rounded-sm font-mono hover:bg-green-900 hover:bg-opacity-40 transition-all">
-                <div class="uppercase flex-grow">{{ trait[0] }}</div>
+              <div v-for="trait in traits" :key="trait[0]" class="flex gap-1 sm:gap-4 justify-between items-center px-2 rounded-sm font-mono hover:bg-green-900 hover:bg-opacity-40 transition-all">
+                <div class="uppercase flex-grow relative text-clip overflow-hidden">
+                    {{ trait[0] }}
+                    <span class="absolute opacity-0 appear transition-all">{{ suffixes[trait[0]] }}</span>
+                </div>
                 <button @click="updateTrait(trait[0], -1)" class="p-2" :class="{'opacity-20 cursor-not-allowed' : trait[1] < 3 }">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                     <path fill-rule="evenodd" d="M7.72 12.53a.75.75 0 010-1.06l7.5-7.5a.75.75 0 111.06 1.06L9.31 12l6.97 6.97a.75.75 0 11-1.06 1.06l-7.5-7.5z" clip-rule="evenodd" />
                     </svg>
                 </button>
-                <div class="text-center w-8">{{ trait[1] }}</div>
+                <div class="text-center w-6">{{ trait[1] }}</div>
                 <button @click="updateTrait(trait[0], 1)" class="p-2" :class="{'opacity-20 cursor-not-allowed' : trait[1] > 9 || freePoints === 0}">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
                     <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 010 1.06l-7.5 7.5a.75.75 0 01-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 011.06-1.06l7.5 7.5z" clip-rule="evenodd" />
@@ -26,9 +29,9 @@
                 </button>
             </div>
             <hr class="my-2 border-canto opacity-30">
-            <div class="flex gap-4 justify-between items-center px-2 text-2xl">
+            <div class="flex gap-4 justify-between items-center font-mono">
                 <div class="flex-grow text-right opacity-30">Unassigned: </div>
-                <div class="w-32 text-center font-mono" :class="{'opacity-100': freePoints > 0, 'opacity-30': freePoints === 0}">{{ freePoints }} / 35</div>
+                <div class="w-32 text-center " :class="{'opacity-100': freePoints > 0, 'opacity-30': freePoints === 0}">{{ freePoints }} / 35</div>
                 <button @click="randomize" class="hover:opacity-100 opacity-50">
                     <dice-icon class="w-10 h-10"/>
                 </button>
@@ -48,9 +51,9 @@
       <!-- <div class="w-full flex justify-center gap-8 mt-10 text-white drop-shadow">
           <a href="https://twitter.com/Hero_Souls_Tech" target="_blank" rel="noopener nofollow"><twitter-icon class="w-8 h-8 cursor-pointer" /></a>
       </div> -->
-      <div v-if="minting" class="flex justify-center items-center absolute inset-0 bg-black bg-opacity-50">
-        <div class="rounded-lg bg-white drop-shadow-lg p-8 text-center">
-          Waiting for blockchain confirmation...
+      <div v-if="minting" class="flex justify-center items-center absolute inset-0 bg-black bg-opacity-70 backdrop-blur-sm">
+        <div class="rounded-md bg-black border border-canto drop-shadow-lg p-8 text-center">
+          Summoning...
         </div>
       </div>
       <transition>
@@ -86,6 +89,16 @@ export default {
   data() {
     return {
       clicks: 0,
+      suffixes: {
+        agi: 'lity',
+        cha: 'risma',
+        con: 'stitution',
+        dex: 'terity',
+        int: 'elligence',
+        str: 'ength',
+        wis: 'dom'
+
+      },
       stats: {
         agi: 5,
         cha: 5,
@@ -207,7 +220,10 @@ often be enough to get you through a lot of situations.`
 };
 </script>
 <style>
-/* we will explain what these classes do next! */
+.appear {
+    transition: all 0.5s
+}
+div:hover>.appear { opacity: 0.55 }
 .v-enter-active,
 .v-leave-active {
   transition: all 0.5s ease;

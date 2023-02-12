@@ -4,7 +4,7 @@ import { ethers } from 'ethers'
 import abi from './abi.json'
 import { toRaw, isProxy } from 'vue'
 
-const network = config.testnet
+const network = config[config.network]
 
 let crowdsale
 

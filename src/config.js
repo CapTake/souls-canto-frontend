@@ -14,5 +14,6 @@ export default {
         symbol: 'CANTO',
         explorer: 'https://evm.explorer.canto.io',
         contract: ''
-    }
+    },
+    network: 'testnet'
 }
