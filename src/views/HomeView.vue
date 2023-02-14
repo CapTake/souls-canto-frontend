@@ -65,8 +65,13 @@
     <section id="about" :class="{crt: clicks > 10}" class="punk flex items-center text-canto justify-center min-h-screen pt-20 relative w-full">
         <div class="max-w-xl w-full bg-black rounded-md drop-shadow-lg border border-spacing-1 border-canto p-4 lg:p-8 mx-4 md:relative overflow-hidden">
             <h2 class="text-center mb-6 text-xl">About</h2>
-            <p class="pb-4">
-            </p>
+            <div class="flex gap-8 justify-center pb-4">
+                <a href="https://twitter.com/Hero_Souls_Tech" target="_blank" rel="noopener nofollow"><twitter-icon class="w-6 h-6 cursor-pointer" /></a>
+                <a href="https://twitter.com/Hero_Souls_Tech" target="_blank" rel="noopener nofollow"><github-icon class="w-6 h-6 cursor-pointer" /></a>
+            </div>
+            <about-it class="pb-8 text-sm opacity-60" />
+            <h2 class="text-center mb-6 text-xl">FAQ</h2>
+            <f-a-q />
         </div>
     </section>
 </template>
@@ -74,17 +79,20 @@
 <script>
 // import FAQ from '@/components/FAQ.vue'
 import DiceIcon from '@/components/DiceIcon.vue'
+import TwitterIcon from '@/components/TwitterIcon.vue'
+import GithubIcon from '@/components/GithubIcon'
+import FAQ from '@/components/FAQ.vue'
 import { mapGetters, mapState } from 'vuex'
 import config from '../config'
 import CantoIcon from '@/components/CantoIcon.vue'
-// import AboutIt from '@/components/AboutIt.vue'
+import AboutIt from '@/components/AboutIt.vue'
 
 const MAX_CUMULATIVE_POINTS = 35
 const MIN_TRAIT_POINTS = 2
 const MAX_TRAIT_POINTS = 10
 
 export default {
-  components: { DiceIcon, CantoIcon },
+  components: { DiceIcon, CantoIcon, AboutIt, TwitterIcon, GithubIcon, FAQ },
   name: 'HomeView',
   data() {
     return {
