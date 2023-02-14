@@ -29,10 +29,13 @@ export default {
                     commit('success', `Successfully summoned soul #${id}`)
                 }
                 commit('minted', id.add(1)) // token Ids are 0 based
-                const price = await crowdsale.price()
+                // const price = await crowdsale.price()
                 commit('price', price)
             })
-
+            // eslint-disable-next-line no-unused-vars
+            crowdsale.on("EpochChanged", async (epoch, price, event) => {
+                commit('price', price)
+            })
             const ethereum = await detectEthereumProvider()
             if (ethereum) {
                 const provider = new ethers.providers.Web3Provider(ethereum)
