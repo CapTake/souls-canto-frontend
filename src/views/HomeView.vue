@@ -29,7 +29,7 @@
                 </button>
             </div>
             <hr class="my-2 border-canto opacity-30">
-            <div class="flex gap-4 justify-between items-center font-mono">
+            <div class="flex gap-4 justify-between items-center">
                 <div class="flex-grow text-right opacity-30">Unassigned: </div>
                 <div class="w-32 text-center " :class="{'opacity-100': freePoints > 0, 'opacity-30': freePoints === 0}">{{ freePoints }} / 35</div>
                 <button @click="randomize" class="hover:opacity-100 opacity-50">
@@ -37,8 +37,18 @@
                 </button>
             </div>
         </div>
-        <div class="text-center tracking-wide text-xl opacity-30 mb-4 mt-8">
-          Summoned: {{ minted }}, Current price: {{ Math.round(priceView) }} canto
+        <div class="flex gap-2 flex-col sm:flex-row justify-center items-center text-xl opacity-40 mb-4 mt-8">
+            <div>
+                Summoned:
+                <div class="inline-block h-6 relative">
+                    <Transition name="slide-up">
+                        <div class="w-10 text-right" :key="minted">{{ minted }}</div>
+                    </Transition>
+                </div>,
+            </div>
+            <div>
+                price: {{ Math.round(priceView) }} canto
+            </div>
         </div>
         <div class="text-center mb-6">
           <button @click="mint()" class="bg-canto px-6 py-2.5 text-2xl hover:bg-black text-black hover:text-canto rounded drop-shadow-lg border-2 border-canto">
@@ -408,5 +418,21 @@ div:hover>.appear { opacity: 0.55 }
 }
 .crt {
   animation: textShadow 1.6s infinite;
+}
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.25s ease-out;
+  color: white;
+}
+
+.slide-up-enter-from {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.slide-up-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+  position: absolute;
 }
 </style>

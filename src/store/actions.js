@@ -27,13 +27,15 @@ export default {
             crowdsale.on("SoulSummoned", async (summoner, value, id, event) => {
                 if (summoner?.toLowerCase() === state.userAddress.toLowerCase()) {
                     commit('success', `Successfully summoned soul #${id}`)
+                    commit('minting')
                 }
-                commit('minted', id.add(1)) // token Ids are 0 based
+                commit('minted', id) // token Ids are 0 based
                 // const price = await crowdsale.price()
-                commit('price', price)
+                // commit('price', price)
             })
             // eslint-disable-next-line no-unused-vars
             crowdsale.on("EpochChanged", async (epoch, price, event) => {
+                console.log({epoch, price})
                 commit('price', price)
             })
             const ethereum = await detectEthereumProvider()
