@@ -9,11 +9,11 @@ export default {
     },
     mainnet: {
         name: 'CANTO',
-        rpc: 'https://canto.slingshot.finance/',
+        rpc: 'https://canto.gravitychain.io/',
         chainId: 7700,
         symbol: 'CANTO',
         explorer: 'https://evm.explorer.canto.io',
-        contract: ''
+        contract: '0x5e640ecC14E82F964697F6299690e20C10f5B31D'
     },
-    network: 'testnet'
+    network: 'mainnet'
 }
