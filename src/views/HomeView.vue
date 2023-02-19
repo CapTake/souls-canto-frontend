@@ -77,7 +77,7 @@
             <h2 class="text-center mb-6 text-xl">About</h2>
             <div class="flex gap-8 justify-center pb-4">
                 <a href="https://twitter.com/Hero_Souls_Tech" target="_blank" rel="noopener nofollow"><twitter-icon class="w-6 h-6 cursor-pointer" /></a>
-                <a href="https://twitter.com/Hero_Souls_Tech" target="_blank" rel="noopener nofollow"><github-icon class="w-6 h-6 cursor-pointer" /></a>
+                <a href="https://github.com/CapTake/souls-canto-frontend" target="_blank" rel="noopener nofollow"><github-icon class="w-6 h-6 cursor-pointer" /></a>
             </div>
             <about-it class="pb-8 text-sm opacity-60" />
             <h2 class="text-center mb-6 text-xl">FAQ</h2>
