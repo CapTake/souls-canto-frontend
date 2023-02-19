@@ -24,7 +24,7 @@ export default {
         ],
         [
             'How are Souls created?',
-            'Initially, there will be a limited genesis mint of 2500 Souls. The price of each Soul during the genesis mint will have a bonding curve, with the price increasing by 2 Canto for every 100 Souls minted.',
+            'Initially, there will be a limited genesis mint of 2500 Souls. The price of each Soul during the genesis mint will have a bonding curve, with the price increasing by 3 Canto for every 100 Souls minted.',
         ],
         [
             'Where are Souls stored?',
