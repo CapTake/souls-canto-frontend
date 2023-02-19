@@ -30,8 +30,8 @@
             </div>
             <hr class="my-2 border-canto opacity-30">
             <div class="flex gap-4 justify-between items-center">
-                <div class="flex-grow text-right opacity-30">Unassigned: </div>
-                <div class="w-32 text-center " :class="{'opacity-100': freePoints > 0, 'opacity-30': freePoints === 0}">{{ freePoints }} / 35</div>
+                <div class="flex-grow text-right opacity-30">Assigned: </div>
+                <div class="w-32 text-center " :class="{'opacity-100': freePoints > 0, 'opacity-30': freePoints === 0}">{{ 35 - freePoints }} / 35</div>
                 <button @click="randomize" class="hover:opacity-100 opacity-50">
                     <dice-icon class="w-10 h-10"/>
                 </button>

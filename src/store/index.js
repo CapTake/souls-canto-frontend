@@ -14,7 +14,7 @@ export default createStore({
     },
     mutations: {
         error: (state, value) => {
-            value && (value.includes('pause') ? toast.success('Summoning will be started soon. Follow us on twiiter to not miss it.') : toast.error(value))
+            value && (value.includes('pause') ? toast.success('Summoning will be started soon. Follow us on twitter to not miss it.') : toast.error(value))
         },
         success: (state, value) => value && toast.success(value),
         userAddress: (state, value) => state.userAddress = value || '',
