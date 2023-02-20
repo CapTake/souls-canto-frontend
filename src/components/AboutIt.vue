@@ -6,7 +6,7 @@
         <p>
             These Souls represent the core traits of a game character, such as Agility, Charisma, Constitution, Dexterity, Intelligence, Strength, and Wisdom, with each trait assigned a number of points by the user.
         </p>
-        <p>Souls are meant to used as  foundation for the player characters in blockchain games.</p>
+        <p>Souls are meant to be used as a foundation for the player characters in blockchain games.</p>
         <p>
             Although the Souls themselves are immutable, their in-game incarnations can evolve and upgrade according to the rules of the game, with the traits of the Soul serving as the "factory defaults" for the in-game character.
         </p>
